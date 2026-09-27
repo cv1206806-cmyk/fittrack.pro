@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTrack Pro | Advanced Fitness & Analytics Portal</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-black: #08090a;
+            --card-bg: #121417;
+            --card-border: #22262d;
+            --neon-lime: #ccff00;
+            --neon-hover: #b3e600;
+            --accent-cyan: #00f2fe;
+            --accent-purple: #9b51e0;
+            --text-main: #ffffff;
+            --text-muted: #8a94a6;
+            --danger-red: #ff4757;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation Header */
+        header {
+            background: rgba(8, 9, 10, 0.95);
+            backdrop-filter: blur(16px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: var(--neon-lime);
+        }
+
+        .header-user-badge {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            background: var(--card-bg);
+            padding: 0.4rem 1.2rem;
+            border-radius: 30px;
+            border: 1px solid var(--card-border);
+        }
+
+        .header-avatar {
+            width: 32px;
+            height: 32px;
+            background: var(--neon-lime);
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .btn-lime {
+            background: var(--neon-lime);
+            color: #000;
+            padding: 0.7rem 1.6rem;
+            border-radius: 40px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-lime:hover {
+            background: var(--neon-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--danger-red);
+            color: var(--danger-red);
+        }
+
+        /* Container Layout */
+        .main-container {
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 7rem 2rem 4rem;
+        }
+
+        /* BEFORE LOGIN: Screen */
+        .login-screen {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            min-height: 75vh;
+        }
+
+        .hero-title h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.2rem;
+        }
+
+        .hero-title h1 span {
+            color: var(--neon-lime);
+        }
+
+        .hero-title p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 2.5rem;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        }
+
+        .login-card h2 {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        select, input {
+            width: 100%;
+            background: #08090a;
+            border: 1px solid var(--card-border);
+            padding: 0.9rem 1.2rem;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        select:focus {
+            border-color: var(--neon-lime);
+        }
+
+        /* AFTER LOGIN: Full Scroll Dashboard */
+        .portal-dashboard {
+            display: none;
+        }
+
+        /* SCROLL REVEAL ANIMATION CLASSES */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .welcome-bar {
+            background: linear-gradient(135deg, #121417 0%, #1e242b 100%);
+            border: 1px solid var(--card-border);
+            padding: 2rem 2.5rem;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .welcome-text h2 {
+            font-size: 2rem;
+        }
+
+        .welcome-text p {
+            color: var(--neon-lime);
+            font-weight: 600;
+        }
+
+        /* Dynamic Grid Layouts */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 1.5rem;
+            border-radius: 16px;
+            position: relative;
+        }
+
+        .stat-card span {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .stat-card h3 {
+            font-size: 1.8rem;
+            margin-top: 0.4rem;
+            color: var(--accent-cyan);
+        }
+
+        .stat-card i {
+            position: absolute;
+            right: 1.2rem;
+            top: 1.2rem;
+            font-size: 1.5rem;
+            color: var(--card-border);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 2rem;
+            border-radius: 20px;
+            height: 100%;
+        }
+
+        .tool-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Workout Logger Items */
+        .workout-input-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .workout-list {
+            list-style: none;
+        }
+
+        .workout-item {
+            background: #08090a;
+            border: 1px solid var(--card-border);
+            padding: 1rem 1.2rem;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        /* Leaderboard Styling */
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .leader-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .rank {
+            width: 25px;
+            font-weight: 800;
+            color: var(--neon-lime);
+        }
+
+        /* Section Title for Scrollable Sections */
+        .section-title {
+            margin: 4rem 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-title h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .section-title h2 span {
+            color: var(--neon-lime);
+        }
+
+        /* Activity Visual Bar Chart */
+        .bar-chart-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 180px;
+            padding-top: 2rem;
+            gap: 10px;
+        }
+
+        .bar-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            height: 100%;
+            justify-content: flex-end;
+        }
+
+        .bar-fill {
+            width: 100%;
+            background: linear-gradient(180deg, var(--neon-lime), #4d6600);
+            border-radius: 8px;
+            transition: height 0.8s ease-in-out;
+        }
+
+        .bar-day {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Macro Nutrients Progress Cards */
+        .macro-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .macro-card {
+            background: #08090a;
+            border: 1px solid var(--card-border);
+            padding: 1.5rem;
+            border-radius: 16px;
+        }
+
+        .macro-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar-bg {
+            background: var(--card-bg);
+            height: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 0.8rem;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--neon-lime);
+            transition: width 0.8s ease-in-out;
+        }
+
+        /* PR Hall of Fame Cards */
+        .pr-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .pr-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 1.8rem;
+            border-radius: 18px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .pr-card:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-5px);
+        }
+
+        .pr-card i {
+            font-size: 2.2rem;
+            color: var(--neon-lime);
+            margin-bottom: 1rem;
+        }
+
+        .pr-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .pr-card .record-val {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-cyan);
+        }
+
+        /* Meal Planner Table Section */
+        .meal-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .meal-table th, .meal-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .meal-table th {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        /* Community Feed Section */
+        .feed-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .feed-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 1.5rem;
+            border-radius: 18px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .feed-avatar {
+            width: 45px;
+            height: 45px;
+            background: var(--neon-lime);
+            color: #000;
+            font-weight: 800;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 900px) {
+            .login-screen, .tools-grid, .dashboard-grid, .macro-grid, .pr-grid, .feed-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <nav>
+            <a href="#" class="logo">
+                <i class="fa-solid fa-bolt" style="color: var(--neon-lime);"></i> FITTRACK<span>PRO</span>
+            </a>
+
+            <!-- Logged-in Header Badge -->
+            <div id="headerUserBadge" class="header-user-badge">
+                <div class="header-avatar" id="headerAvatar">C</div>
+                <span id="headerUserName" style="font-weight: 600; font-size: 0.95rem;">Chandan Verma</span>
+                <button class="btn-outline" onclick="logoutSession()"><i class="fa-solid fa-power-off"></i> Logout</button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-container">
+
+        <!-- BEFORE LOGIN SCREEN -->
+        <div id="loginScreen" class="login-screen">
+            <div class="hero-title">
+                <h1>Welcome To <span>FitTrack Pro</span> Portal</h1>
+                <p>Select your squad profile to unlock active workouts, macro breakdown, weekly analytics, and group feed.</p>
+            </div>
+
+            <div class="login-card">
+                <h2><i class="fa-solid fa-right-to-bracket" style="color: var(--neon-lime);"></i> Member Authentication</h2>
+                
+                <div class="form-group">
+                    <label>Select Profile Name:</label>
+                    <select id="userLoginSelect">
+                        <option value="Chandan Verma">1. Chandan Verma (Admin / Developer)</option>
+                        <option value="Aayan">2. Abdul rehman (Member)</option>
+                        <option value="Sumit Singh">3. Sumit Singh (Member)</option>
+                        <option value="Harsh Giri">4. Harsh Giri (Member)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Encrypted Token Passkey:</label>
+                    <input type="password" value="jwt_encrypted_pass_2026" readonly>
+                </div>
+
+                <button class="btn-lime" style="width: 100%; justify-content: center;" onclick="executeLogin()">
+                    <i class="fa-solid fa-lock-open"></i> Login to Portal
+                </button>
+            </div>
+        </div>
+
+        <!-- AFTER LOGIN: FULL SCROLLABLE PORTAL DASHBOARD WITH REVEAL ANIMATIONS -->
+        <div id="portalDashboard" class="portal-dashboard">
+            
+            <!-- Welcome Top Banner -->
+            <div class="welcome-bar reveal">
+                <div class="welcome-text">
+                    <h2><span id="displayUserGreeting">Welcome Back, Chandan Verma</span> 👋</h2>
+                    <p id="displayUserRole">Role: BSc IT Semester VI Lead Developer</p>
+                </div>
+                <button class="btn-lime" onclick="addWater()"><i class="fa-solid fa-droplet"></i> + Add 0.5L Water Tracker</button>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="dashboard-grid reveal">
+                <div class="stat-card">
+                    <span>Body Weight</span>
+                    <h3 id="statWeight">72.5 KG</h3>
+                    <i class="fa-solid fa-weight-scale"></i>
+                </div>
+                <div class="stat-card">
+                    <span>Active Volume</span>
+                    <h3 id="statVolume">14,200 KG</h3>
+                    <i class="fa-solid fa-dumbbell"></i>
+                </div>
+                <div class="stat-card">
+                    <span>Water Level</span>
+                    <h3 id="statWater">2.5 L / 4.0 L</h3>
+                    <i class="fa-solid fa-glass-water"></i>
+                </div>
+                <div class="stat-card">
+                    <span>Training Streak</span>
+                    <h3 id="statStreak">12 Days 🔥</h3>
+                    <i class="fa-solid fa-fire"></i>
+                </div>
+            </div>
+
+            <!-- Interactive Tools Grid -->
+            <div class="tools-grid reveal">
+                <!-- Exercise Logger -->
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-list-check" style="color: var(--neon-lime);"></i> Live Set Logger</h3>
+                    <div class="workout-input-box">
+                        <input type="text" id="exName" placeholder="Exercise Name">
+                        <input type="number" id="exWeight" placeholder="Weight (KG)">
+                        <input type="number" id="exReps" placeholder="Reps">
+                        <button class="btn-lime" onclick="logWorkoutSet()"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <ul class="workout-list" id="workoutList">
+                        <!-- Dynamic Workouts Load Here -->
+                    </ul>
+                </div>
+
+                <!-- Leaderboard -->
+                <div class="tool-card">
+                    <h3><i class="fa-solid fa-trophy" style="color: #f1c40f;"></i> Squad Gym Leaderboard</h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Weekly Overload Volume Ranking</p>
+                    <div>
+                        <div class="leaderboard-item">
+                            <div class="leader-user"><span class="rank">#1</span> <strong>Chandan Verma</strong></div>
+                            <span style="color: var(--neon-lime);">14,200 KG</span>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="leader-user"><span class="rank">#2</span> <strong>Sumit Singh</strong></div>
+                            <span>11,800 KG</span>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="leader-user"><span class="rank">#3</span> <strong>Aayan</strong></div>
+                            <span>9,500 KG</span>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="leader-user"><span class="rank">#4</span> <strong>Harsh Giri</strong></div>
+                            <span>8,100 KG</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCROLL SECTION 1: WEEKLY WORKOUT TELEMETRY CHART -->
+            <div class="section-title reveal">
+                <h2>Weekly Training <span>Telemetry Chart</span></h2>
+                <span style="color: var(--text-muted); font-size: 0.9rem;">Live Set Load Distribution</span>
+            </div>
+
+            <div class="tool-card reveal" style="margin-bottom: 3rem;">
+                <div class="bar-chart-container">
+                    <div class="bar-col"><div class="bar-fill" id="barMon" style="height: 0%;"></div><span class="bar-day">Mon</span></div>
+                    <div class="bar-col"><div class="bar-fill" id="barTue" style="height: 0%;"></div><span class="bar-day">Tue</span></div>
+                    <div class="bar-col"><div class="bar-fill" id="barWed" style="height: 0%;"></div><span class="bar-day">Wed</span></div>
+                    <div class="bar-col"><div class="bar-fill" id="barThu" style="height: 0%;"></div><span class="bar-day">Thu</span></div>
+                    <div class="bar-col"><div class="bar-fill" id="barFri" style="height: 0%;"></div><span class="bar-day">Fri</span></div>
+                    <div class="bar-col"><div class="bar-fill" id="barSat" style="height: 0%;"></div><span class="bar-day">Sat</span></div>
+                    <div class="bar-col"><div class="bar-fill" id="barSun" style="height: 0%;"></div><span class="bar-day">Sun</span></div>
+                </div>
+            </div>
+
+            <!-- SCROLL SECTION 2: MACRONUTRIENT RATIO BREAKDOWN -->
+            <div class="section-title reveal">
+                <h2>Daily Macro <span>Distribution</span></h2>
+                <span style="color: var(--text-muted); font-size: 0.9rem;">Nutritional Telemetry Tracker</span>
+            </div>
+
+            <div class="macro-grid reveal">
+                <div class="macro-card">
+                    <h4><i class="fa-solid fa-drumstick-bite" style="color: var(--neon-lime);"></i> Protein Target</h4>
+                    <p id="macroProteinText">0g / 0g</p>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" id="fillProtein" style="width: 0%;"></div></div>
+                </div>
+                <div class="macro-card">
+                    <h4><i class="fa-solid fa-bowl-rice" style="color: var(--accent-cyan);"></i> Carbohydrates</h4>
+                    <p id="macroCarbText">0g / 0g</p>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" id="fillCarb" style="width: 0%; background: var(--accent-cyan);"></div></div>
+                </div>
+                <div class="macro-card">
+                    <h4><i class="fa-solid fa-bacon" style="color: var(--accent-purple);"></i> Healthy Fats</h4>
+                    <p id="macroFatText">0g / 0g</p>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" id="fillFat" style="width: 0%; background: var(--accent-purple);"></div></div>
+                </div>
+            </div>
+
+            <!-- NEW SCROLL SECTION 3: DAILY MEAL PLANNER -->
+            <div class="section-title reveal">
+                <h2>Custom <span>Diet & Nutrition Schedule</span></h2>
+                <span style="color: var(--text-muted); font-size: 0.9rem;">Fuel Strategy</span>
+            </div>
+
+            <div class="tool-card reveal" style="margin-bottom: 3rem;">
+                <table class="meal-table">
+                    <thead>
+                        <tr>
+                            <th>Meal Session</th>
+                            <th>Food Description</th>
+                            <th>Estimated Calories</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mealTableBody">
+                        <!-- Dynamic meals injected here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SCROLL SECTION 4: PERSONAL RECORDS (PR Wall) -->
+            <div class="section-title reveal">
+                <h2>Personal Best <span>Records (PR Wall)</span></h2>
+                <span style="color: var(--text-muted); font-size: 0.9rem;">Max Overhead Lift Benchmarks</span>
+            </div>
+
+            <div class="pr-grid reveal">
+                <div class="pr-card">
+                    <i class="fa-solid fa-dumbbell"></i>
+                    <h4>Max Bench Press</h4>
+                    <div class="record-val" id="prBench">100 KG</div>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.4rem;">Personal Best Record</p>
+                </div>
+                <div class="pr-card">
+                    <i class="fa-solid fa-child-reaching"></i>
+                    <h4>Max Deadlift</h4>
+                    <div class="record-val" id="prDeadlift">160 KG</div>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.4rem;">Personal Best Record</p>
+                </div>
+                <div class="pr-card">
+                    <i class="fa-solid fa-person-arrow-down-to-line"></i>
+                    <h4>Max Barbell Squat</h4>
+                    <div class="record-val" id="prSquat">130 KG</div>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.4rem;">Personal Best Record</p>
+                </div>
+            </div>
+
+            <!-- NEW SCROLL SECTION 5: SQUAD COMMUNITY FEED -->
+            <div class="section-title reveal">
+                <h2>Squad Community <span>Live Activity Feed</span></h2>
+                <span style="color: var(--text-muted); font-size: 0.9rem;">Team Logs & Accomplishments</span>
+            </div>
+
+            <div class="feed-grid reveal">
+                <div class="feed-card">
+                    <div class="feed-avatar">C</div>
+                    <div>
+                        <h4 style="font-size: 1rem;">Chandan Verma</h4>
+                        <p style="color: var(--text-muted); font-size: 0.85rem;">Logged 120 KG Deadlift PR! 🔥</p>
+                        <span style="color: var(--neon-lime); font-size: 0.75rem;">10 Mins Ago</span>
+                    </div>
+                </div>
+                <div class="feed-card">
+                    <div class="feed-avatar" style="background: var(--accent-cyan); color: #000;">S</div>
+                    <div>
+                        <h4 style="font-size: 1rem;">Sumit Singh</h4>
+                        <p style="color: var(--text-muted); font-size: 0.85rem;">Completed Leg Day Heavy Sets 💪</p>
+                        <span style="color: var(--accent-cyan); font-size: 0.75rem;">45 Mins Ago</span>
+                    </div>
+                </div>
+                <div class="feed-card">
+                    <div class="feed-avatar" style="background: var(--accent-purple); color: #fff;">A</div>
+                    <div>
+                        <h4 style="font-size: 1rem;">Aayan</h4>
+                        <p style="color: var(--text-muted); font-size: 0.85rem;">Hit daily water intake 4.0L goal! 💧</p>
+                        <span style="color: var(--accent-purple); font-size: 0.75rem;">2 Hours Ago</span>
+                    </div>
+                </div>
+                <div class="feed-card">
+                    <div class="feed-avatar" style="background: #ffaa00; color: #000;">H</div>
+                    <div>
+                        <h4 style="font-size: 1rem;">Harsh Giri</h4>
+                        <p style="color: var(--text-muted); font-size: 0.85rem;">Completed 20 Min Cardio Run 🏃‍♂️</p>
+                        <span style="color: #ffaa00; font-size: 0.75rem;">5 Hours Ago</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- JavaScript Interactivity & Scroll Animations -->
+    <script>
+        // Full Squad Member Database
+        const squadData = {
+            "Chandan Verma": {
+                avatar: "C",
+                role: "BSc IT Sem VI Lead Developer & Gym Member",
+                weight: "72.5 KG",
+                volume: "14,200 KG",
+                water: 2.5,
+                streak: "12 Days 🔥",
+                bench: "110 KG", deadlift: "170 KG", squat: "140 KG",
+                proteinText: "165g / 180g (91%)", proteinPct: "91%",
+                carbText: "280g / 300g (93%)", carbPct: "93%",
+                fatText: "55g / 65g (84%)", fatPct: "84%",
+                bars: ["60%", "85%", "40%", "95%", "70%", "90%", "20%"],
+                workouts: [
+                    "Barbell Deadlift - 120 KG × 6 Reps",
+                    "Heavy Dumbbell Press - 35 KG × 8 Reps"
+                ],
+                meals: [
+                    { time: "Breakfast", desc: "6 Egg Whites, Oats with Almond Milk", cal: "550 kcal" },
+                    { time: "Lunch", desc: "200g Chicken Breast, Basmati Rice, Broccoli", cal: "750 kcal" },
+                    { time: "Post-Workout", desc: "Whey Protein Shake + 1 Banana", cal: "320 kcal" }
+                ]
+            },
+            "Aayan": {
+                avatar: "A",
+                role: "Active Fitness Member",
+                weight: "68.0 KG",
+                volume: "9,500 KG",
+                water: 1.5,
+                streak: "6 Days 🔥",
+                bench: "85 KG", deadlift: "130 KG", squat: "100 KG",
+                proteinText: "120g / 150g (80%)", proteinPct: "80%",
+                carbText: "210g / 250g (84%)", carbPct: "84%",
+                fatText: "40g / 55g (72%)", fatPct: "72%",
+                bars: ["40%", "60%", "75%", "50%", "80%", "30%", "10%"],
+                workouts: [
+                    "Lat Pulldown - 60 KG × 10 Reps",
+                    "Bicep Cables - 25 KG × 12 Reps"
+                ],
+                meals: [
+                    { time: "Breakfast", desc: "Paneer Sandwich + Apple", cal: "450 kcal" },
+                    { time: "Lunch", desc: "Dal Tadka, 3 Chapati + Salad", cal: "600 kcal" }
+                ]
+            },
+            "Sumit Singh": {
+                avatar: "S",
+                role: "Strength & Powerlifter Member",
+                weight: "78.0 KG",
+                volume: "11,800 KG",
+                water: 3.0,
+                streak: "9 Days 🔥",
+                bench: "120 KG", deadlift: "185 KG", squat: "155 KG",
+                proteinText: "170g / 170g (100%)", proteinPct: "100%",
+                carbText: "300g / 320g (93%)", carbPct: "93%",
+                fatText: "60g / 70g (85%)", fatPct: "85%",
+                bars: ["80%", "90%", "85%", "70%", "95%", "85%", "30%"],
+                workouts: [
+                    "Squats - 110 KG × 8 Reps",
+                    "Leg Press - 200 KG × 10 Reps"
+                ],
+                meals: [
+                    { time: "Breakfast", desc: "4 Whole Eggs, Peanut Butter Toast", cal: "650 kcal" },
+                    { time: "Lunch", desc: "Chicken Rice Bowl", cal: "800 kcal" }
+                ]
+            },
+            "Harsh Giri": {
+                avatar: "H",
+                role: "Gym Fitness Trainee",
+                weight: "65.0 KG",
+                volume: "8,100 KG",
+                water: 2.0,
+                streak: "4 Days 🔥",
+                bench: "75 KG", deadlift: "110 KG", squat: "90 KG",
+                proteinText: "100g / 140g (71%)", proteinPct: "71%",
+                carbText: "180g / 230g (78%)", carbPct: "78%",
+                fatText: "35g / 50g (70%)", fatPct: "70%",
+                bars: ["30%", "50%", "40%", "60%", "50%", "40%", "0%"],
+                workouts: [
+                    "Treadmill Run - 20 Mins",
+                    "Pushups - 3 Sets × 15 Reps"
+                ],
+                meals: [
+                    { time: "Breakfast", desc: "Fruit Smoothie + Protein Powder", cal: "400 kcal" },
+                    { time: "Lunch", desc: "Mixed Veg Curry + Brown Rice", cal: "550 kcal" }
+                ]
+            }
+        };
+
+        let currentActiveUser = "";
+        let currentWaterVal = 0;
+
+        // SCROLL REVEAL OBSERVER SETUP
+        function setupScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("active");
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+        }
+
+        function executeLogin() {
+            const userName = document.getElementById("userLoginSelect").value;
+            currentActiveUser = userName;
+            const user = squadData[userName];
+
+            // 1. Hide Login Screen, Reveal Full Dashboard
+            document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("portalDashboard").style.display = "block";
+            document.getElementById("headerUserBadge").style.display = "flex";
+
+            // 2. Set Header & Profile
+            document.getElementById("headerAvatar").innerText = user.avatar;
+            document.getElementById("headerUserName").innerText = userName;
+            document.getElementById("displayUserGreeting").innerText = "Welcome Back, " + userName;
+            document.getElementById("displayUserRole").innerText = "Role: " + user.role;
+
+            // 3. Set Stats Data
+            document.getElementById("statWeight").innerText = user.weight;
+            document.getElementById("statVolume").innerText = user.volume;
+            currentWaterVal = user.water;
+            document.getElementById("statWater").innerText = currentWaterVal.toFixed(1) + " L / 4.0 L";
+            document.getElementById("statStreak").innerText = user.streak;
+
+            // 4. Set PR Wall Records
+            document.getElementById("prBench").innerText = user.bench;
+            document.getElementById("prDeadlift").innerText = user.deadlift;
+            document.getElementById("prSquat").innerText = user.squat;
+
+            // 5. Set Macro Progress
+            document.getElementById("macroProteinText").innerText = user.proteinText;
+            document.getElementById("fillProtein").style.width = user.proteinPct;
+            document.getElementById("macroCarbText").innerText = user.carbText;
+            document.getElementById("fillCarb").style.width = user.carbPct;
+            document.getElementById("macroFatText").innerText = user.fatText;
+            document.getElementById("fillFat").style.width = user.fatPct;
+
+            // 6. Set Weekly Chart Bars
+            const days = ["barMon", "barTue", "barWed", "barThu", "barFri", "barSat", "barSun"];
+            days.forEach((day, idx) => {
+                document.getElementById(day).style.height = user.bars[idx];
+            });
+
+            // 7. Load Exercises
+            const workoutList = document.getElementById("workoutList");
+            workoutList.innerHTML = "";
+            user.workouts.forEach(w => {
+                const li = document.createElement("li");
+                li.className = "workout-item";
+                li.innerHTML = `<span><strong>${w}</strong></span> <span style="color:var(--neon-lime);"><i class="fa-solid fa-circle-check"></i> Saved</span>`;
+                workoutList.appendChild(li);
+            });
+
+            // 8. Load Meals
+            const mealBody = document.getElementById("mealTableBody");
+            mealBody.innerHTML = "";
+            user.meals.forEach(m => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `<td><strong>${m.time}</strong></td><td>${m.desc}</td><td style="color: var(--neon-lime);">${m.cal}</td>`;
+                mealBody.appendChild(tr);
+            });
+
+            // Trigger Scroll Animations
+            setTimeout(setupScrollReveal, 100);
+        }
+
+        function logoutSession() {
+            document.getElementById("loginScreen").style.display = "grid";
+            document.getElementById("portalDashboard").style.display = "none";
+            document.getElementById("headerUserBadge").style.display = "none";
+        }
+
+        function addWater() {
+            if (currentActiveUser === "") return;
+            currentWaterVal += 0.5;
+            document.getElementById("statWater").innerText = currentWaterVal.toFixed(1) + " L / 4.0 L";
+        }
+
+        function logWorkoutSet() {
+            const name = document.getElementById("exName").value;
+            const weight = document.getElementById("exWeight").value;
+            const reps = document.getElementById("exReps").value;
+
+            if(!name || !weight || !reps) {
+                alert("Kripya Exercise Name, Weight aur Reps enter karein!");
+                return;
+            }
+
+            const workoutList = document.getElementById("workoutList");
+            const li = document.createElement("li");
+            li.className = "workout-item";
+            li.innerHTML = `<span><strong>${name}</strong> - ${weight} KG × ${reps} Reps</span> <span style="color:var(--neon-lime);"><i class="fa-solid fa-circle-check"></i> Saved</span>`;
+            workoutList.prepend(li);
+
+            document.getElementById("exName").value = "";
+            document.getElementById("exWeight").value = "";
+            document.getElementById("exReps").value = "";
+        }
+    </script>
+</body>
+</html>
