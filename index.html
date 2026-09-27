@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitTrack Pro | Advanced Fitness & Analytics Portal</title>
+    <title>FitTrack Pro | Advanced Fitness Portal</title>
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -428,7 +428,7 @@
             transition: width 0.8s ease-in-out;
         }
 
-        /* PR Hall of Fame Cards */
+        /* PR Hall of Fame Cards - Clickable */
         .pr-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -443,11 +443,14 @@
             border-radius: 18px;
             text-align: center;
             transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
         }
 
         .pr-card:hover {
-            border-color: var(--accent-cyan);
+            border-color: var(--neon-lime);
             transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(204, 255, 0, 0.15);
         }
 
         .pr-card i {
@@ -465,6 +468,13 @@
             font-size: 2rem;
             font-weight: 800;
             color: var(--accent-cyan);
+        }
+
+        .click-hint {
+            font-size: 0.75rem;
+            color: var(--neon-lime);
+            margin-top: 0.8rem;
+            display: inline-block;
         }
 
         /* Meal Planner Table Section */
@@ -486,7 +496,7 @@
             text-transform: uppercase;
         }
 
-        /* Community Feed Section */
+        /* Community Feed Section - Clickable */
         .feed-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -501,6 +511,13 @@
             border-radius: 18px;
             display: flex;
             gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .feed-card:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-3px);
         }
 
         .feed-avatar {
@@ -513,6 +530,82 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        /* POPUP MODAL STYLING */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        .modal-card {
+            background: var(--card-bg);
+            border: 1px solid var(--neon-lime);
+            border-radius: 24px;
+            max-width: 500px;
+            width: 100%;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--danger-red);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.2rem;
+        }
+
+        .modal-header i {
+            font-size: 1.8rem;
+            color: var(--neon-lime);
+        }
+
+        .modal-body {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .modal-body strong {
+            color: var(--text-main);
+        }
+
+        .modal-detail-box {
+            background: #08090a;
+            border: 1px solid var(--card-border);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1rem;
         }
 
         @media (max-width: 900px) {
@@ -556,7 +649,7 @@
                     <label>Select Profile Name:</label>
                     <select id="userLoginSelect">
                         <option value="Chandan Verma">1. Chandan Verma (Admin / Developer)</option>
-                        <option value="Aayan">2. Abdul rehman (Member)</option>
+                        <option value="Abdul Rehman">2. Abdul Rehman (Member)</option>
                         <option value="Sumit Singh">3. Sumit Singh (Member)</option>
                         <option value="Harsh Giri">4. Harsh Giri (Member)</option>
                     </select>
@@ -639,7 +732,7 @@
                             <span>11,800 KG</span>
                         </div>
                         <div class="leaderboard-item">
-                            <div class="leader-user"><span class="rank">#3</span> <strong>Aayan</strong></div>
+                            <div class="leader-user"><span class="rank">#3</span> <strong>Abdul Rehman</strong></div>
                             <span>9,500 KG</span>
                         </div>
                         <div class="leaderboard-item">
@@ -692,7 +785,7 @@
                 </div>
             </div>
 
-            <!-- NEW SCROLL SECTION 3: DAILY MEAL PLANNER -->
+            <!-- SCROLL SECTION 3: DAILY MEAL PLANNER -->
             <div class="section-title reveal">
                 <h2>Custom <span>Diet & Nutrition Schedule</span></h2>
                 <span style="color: var(--text-muted); font-size: 0.9rem;">Fuel Strategy</span>
@@ -713,41 +806,41 @@
                 </table>
             </div>
 
-            <!-- SCROLL SECTION 4: PERSONAL RECORDS (PR Wall) -->
+            <!-- SCROLL SECTION 4: PERSONAL RECORDS (PR Wall - Clickable) -->
             <div class="section-title reveal">
                 <h2>Personal Best <span>Records (PR Wall)</span></h2>
-                <span style="color: var(--text-muted); font-size: 0.9rem;">Max Overhead Lift Benchmarks</span>
+                <span style="color: var(--text-muted); font-size: 0.9rem;">Click Card For Lift Details</span>
             </div>
 
             <div class="pr-grid reveal">
-                <div class="pr-card">
+                <div class="pr-card" onclick="openPRModal('Bench Press')">
                     <i class="fa-solid fa-dumbbell"></i>
                     <h4>Max Bench Press</h4>
                     <div class="record-val" id="prBench">100 KG</div>
-                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.4rem;">Personal Best Record</p>
+                    <span class="click-hint"><i class="fa-solid fa-arrow-pointer"></i> Click for history</span>
                 </div>
-                <div class="pr-card">
+                <div class="pr-card" onclick="openPRModal('Deadlift')">
                     <i class="fa-solid fa-child-reaching"></i>
                     <h4>Max Deadlift</h4>
                     <div class="record-val" id="prDeadlift">160 KG</div>
-                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.4rem;">Personal Best Record</p>
+                    <span class="click-hint"><i class="fa-solid fa-arrow-pointer"></i> Click for history</span>
                 </div>
-                <div class="pr-card">
+                <div class="pr-card" onclick="openPRModal('Squat')">
                     <i class="fa-solid fa-person-arrow-down-to-line"></i>
                     <h4>Max Barbell Squat</h4>
                     <div class="record-val" id="prSquat">130 KG</div>
-                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.4rem;">Personal Best Record</p>
+                    <span class="click-hint"><i class="fa-solid fa-arrow-pointer"></i> Click for history</span>
                 </div>
             </div>
 
-            <!-- NEW SCROLL SECTION 5: SQUAD COMMUNITY FEED -->
+            <!-- SCROLL SECTION 5: SQUAD COMMUNITY FEED (Clickable Cards) -->
             <div class="section-title reveal">
                 <h2>Squad Community <span>Live Activity Feed</span></h2>
-                <span style="color: var(--text-muted); font-size: 0.9rem;">Team Logs & Accomplishments</span>
+                <span style="color: var(--text-muted); font-size: 0.9rem;">Click Feed Card For Details</span>
             </div>
 
             <div class="feed-grid reveal">
-                <div class="feed-card">
+                <div class="feed-card" onclick="openFeedModal('Chandan Verma', 'Logged 120 KG Deadlift PR! 🔥', '10 Mins Ago', 'Tested 1 Rep Max at local gym. Form was clean with full lock out.')">
                     <div class="feed-avatar">C</div>
                     <div>
                         <h4 style="font-size: 1rem;">Chandan Verma</h4>
@@ -755,7 +848,7 @@
                         <span style="color: var(--neon-lime); font-size: 0.75rem;">10 Mins Ago</span>
                     </div>
                 </div>
-                <div class="feed-card">
+                <div class="feed-card" onclick="openFeedModal('Sumit Singh', 'Completed Leg Day Heavy Sets 💪', '45 Mins Ago', 'Squatted 110 KG for 8 clean reps. Quad burnout session.')">
                     <div class="feed-avatar" style="background: var(--accent-cyan); color: #000;">S</div>
                     <div>
                         <h4 style="font-size: 1rem;">Sumit Singh</h4>
@@ -763,15 +856,15 @@
                         <span style="color: var(--accent-cyan); font-size: 0.75rem;">45 Mins Ago</span>
                     </div>
                 </div>
-                <div class="feed-card">
+                <div class="feed-card" onclick="openFeedModal('Abdul Rehman', 'Hit daily water intake 4.0L goal! 💧', '2 Hours Ago', 'Successfully tracked 4 Liters hydration target for 5th day in a row.')">
                     <div class="feed-avatar" style="background: var(--accent-purple); color: #fff;">A</div>
                     <div>
-                        <h4 style="font-size: 1rem;">Aayan</h4>
+                        <h4 style="font-size: 1rem;">Abdul Rehman</h4>
                         <p style="color: var(--text-muted); font-size: 0.85rem;">Hit daily water intake 4.0L goal! 💧</p>
                         <span style="color: var(--accent-purple); font-size: 0.75rem;">2 Hours Ago</span>
                     </div>
                 </div>
-                <div class="feed-card">
+                <div class="feed-card" onclick="openFeedModal('Harsh Giri', 'Completed 20 Min Cardio Run 🏃‍♂️', '5 Hours Ago', 'Maintained 10 km/h pace on treadmill. Calorie burn target achieved.')">
                     <div class="feed-avatar" style="background: #ffaa00; color: #000;">H</div>
                     <div>
                         <h4 style="font-size: 1rem;">Harsh Giri</h4>
@@ -783,6 +876,23 @@
 
         </div>
 
+    </div>
+
+    <!-- UNIVERSAL POPUP MODAL -->
+    <div id="universalModal" class="modal-overlay">
+        <div class="modal-card">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <i id="modalIcon" class="fa-solid fa-circle-info"></i>
+                <h3 id="modalTitle">Modal Header</h3>
+            </div>
+            <div class="modal-body" id="modalBody">
+                Modal Content Here...
+            </div>
+            <div style="margin-top: 1.5rem; text-align: right;">
+                <button class="btn-lime" onclick="closeModal()">Close Window</button>
+            </div>
+        </div>
     </div>
 
     <!-- JavaScript Interactivity & Scroll Animations -->
@@ -811,7 +921,7 @@
                     { time: "Post-Workout", desc: "Whey Protein Shake + 1 Banana", cal: "320 kcal" }
                 ]
             },
-            "Aayan": {
+            "Abdul Rehman": {
                 avatar: "A",
                 role: "Active Fitness Member",
                 weight: "68.0 KG",
@@ -988,6 +1098,44 @@
             document.getElementById("exName").value = "";
             document.getElementById("exWeight").value = "";
             document.getElementById("exReps").value = "";
+        }
+
+        /* MODAL INTERACTIVITY FUNCTIONS */
+        function openPRModal(exercise) {
+            const user = squadData[currentActiveUser || "Chandan Verma"];
+            let val = "";
+            if(exercise === "Bench Press") val = user.bench;
+            if(exercise === "Deadlift") val = user.deadlift;
+            if(exercise === "Squat") val = user.squat;
+
+            document.getElementById("modalIcon").className = "fa-solid fa-trophy";
+            document.getElementById("modalTitle").innerText = exercise + " Breakup Detail";
+            document.getElementById("modalBody").innerHTML = `
+                <p>Personal Record holder: <strong>${currentActiveUser || "Chandan Verma"}</strong></p>
+                <div class="modal-detail-box">
+                    <p style="margin-bottom:0.5rem;">Current Max Record: <strong style="color:var(--neon-lime); font-size: 1.3rem;">${val}</strong></p>
+                    <p style="font-size:0.85rem;">Last Updated: 2 Days Ago</p>
+                    <p style="font-size:0.85rem;">Verification Status: <span style="color:var(--neon-lime);">Verified Gym Admin Lift</span></p>
+                </div>
+            `;
+            document.getElementById("universalModal").style.display = "flex";
+        }
+
+        function openFeedModal(user, title, time, notes) {
+            document.getElementById("modalIcon").className = "fa-solid fa-comments";
+            document.getElementById("modalTitle").innerText = user + "'s Activity Log";
+            document.getElementById("modalBody").innerHTML = `
+                <p><strong style="color:#fff;">${title}</strong></p>
+                <p style="font-size: 0.8rem; color: var(--neon-lime); margin-bottom: 0.8rem;">${time}</p>
+                <div class="modal-detail-box">
+                    <p><strong>Note:</strong> ${notes}</p>
+                </div>
+            `;
+            document.getElementById("universalModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("universalModal").style.display = "none";
         }
     </script>
 </body>
